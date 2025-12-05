@@ -51,6 +51,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/products").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/products").hasRole("GERENTE")
                 .requestMatchers(HttpMethod.GET, "/api/products/low-stock").hasRole("GERENTE")
                 .requestMatchers(HttpMethod.POST, "/api/products/**/decrease").hasAnyRole("VENDEDOR","GERENTE")
