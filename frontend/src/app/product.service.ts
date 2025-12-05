@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
-  base = '/api/products';
+  private base = '/api/products';
+
   constructor(private http: HttpClient) {}
 
   listAll(): Observable<any[]> {
@@ -13,5 +14,9 @@ export class ProductService {
 
   lowStock(): Observable<any[]> {
     return this.http.get<any[]>(this.base + '/low-stock');
+  }
+
+  createOrder(req: any): Observable<any> {
+    return this.http.post('/api/orders', req);
   }
 }

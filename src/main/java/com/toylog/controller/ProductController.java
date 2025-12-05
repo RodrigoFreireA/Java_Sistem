@@ -43,6 +43,12 @@ public class ProductController {
         return ResponseEntity.created(URI.create("/api/products/" + saved.getId())).body(dto);
     }
 
+    @GetMapping
+    public List<ProductDTO> listAll() {
+        List<Product> list = productRepository.findAll();
+        return list.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
     @GetMapping("/low-stock")
     public List<ProductDTO> lowStock() {
         List<Product> list = productRepository.findAll().stream()

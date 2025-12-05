@@ -1,0 +1,36 @@
+# Root .gitignore for ToyLog (backend + frontend)
+
+# Java/Maven backend
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+*.iws
+*.ipr
+node_modules/
+*.log
+
+# Node.js/Angular frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.vscode/*
+!frontend/.vscode/extensions.json
+!frontend/.vscode/launch.json
+!frontend/.vscode/tasks.json
+
+# General
+*.DS_Store
+*.swp
+*.swo
+*~
+.env
+.env.local
