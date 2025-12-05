@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/toylog}
+    username: ${JDBC_DATABASE_USERNAME:postgres}
+    password: ${JDBC_DATABASE_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+flyway:
+  enabled: true
+  locations: classpath:db/migration
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+
+jwt:
+  secret: ${JWT_SECRET:change_this_secret_for_prod}
+  expiration-ms: ${JWT_EXPIRATION_MS:86400000} # 1 day
