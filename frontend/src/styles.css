@@ -1,1 +1,30 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --bg: #0b0f16;
+  --surface: #111623;
+  --surface-alt: #0c111a;
+  --border: #1d2433;
+  --text: #f5f7fa;
+  --muted: #b8c1d4;
+  --primary: #1976d2;
+  --accent: #00d2ff;
+  --success: #22c55e;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  min-height: 100%;
+}
+
+app-root {
+  display: block;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+a {
+  color: inherit;
+}

@@ -1,0 +1,54 @@
+<div class="page">
+  <section class="hero">
+    <div class="hero-box">
+      <img [src]="slides[currentSlide].image" alt="banner" class="hero-img" />
+      <div class="hero-content">
+        <div class="hero-badge">{{slides[currentSlide].badge}}</div>
+        <h1><span>{{slides[currentSlide].title1}}</span> {{slides[currentSlide].title2}}</h1>
+        <p>{{slides[currentSlide].subtitle}}</p>
+        <div class="hero-actions">
+          <a href="#catalogo" class="btn-primary">Ver brinquedos</a>
+        </div>
+      </div>
+      <div class="hero-dots">
+        <button *ngFor="let s of slides; index as i" (click)="goToSlide(i)" [class.active]="i===currentSlide"></button>
+      </div>
+      <button class="hero-nav prev" (click)="prevSlide()" aria-label="Anterior">&lt;</button>
+      <button class="hero-nav next" (click)="nextSlide()" aria-label="Proximo">&gt;</button>
+    </div>
+  </section>
+
+  <section class="catalog">
+    <aside class="categories">
+      <div class="cat-title">Categorias</div>
+      <ul>
+        <li *ngFor="let cat of categories" (click)="filterByCategory(cat.name)" [class.active]="cat.active">
+          <span>{{cat.name}}</span>
+          <span class="pill">{{cat.count}}</span>
+        </li>
+      </ul>
+    </aside>
+
+    <div class="cards">
+      <div class="count">Mostrando {{filteredCards.length}} brinquedos</div>
+      <div class="empty" *ngIf="filteredCards.length === 0">Nenhum brinquedo encontrado.</div>
+      <div class="grid" *ngIf="filteredCards.length > 0" id="catalogo">
+        <div class="card" *ngFor="let card of filteredCards">
+          <div class="card-img">
+            <img [src]="card.image" alt="{{card.name}}" />
+            <div class="tag age" *ngIf="card.ageRange">{{card.ageRange}}</div>
+            <div class="tag size" *ngIf="card.size">{{card.size}}</div>
+          </div>
+          <div class="card-body">
+            <div class="card-title">{{card.name}}</div>
+            <div class="card-cat">{{card.category}}</div>
+            <div class="card-bottom">
+              <span class="price">R$ {{card.price | number:'1.0-0'}}</span>
+              <button class="btn-success" (click)="selectProduct(card)">Agendar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

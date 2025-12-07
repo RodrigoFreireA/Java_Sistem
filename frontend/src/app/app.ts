@@ -1,23 +1,38 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet, Router, RouterLinkActive } from '@angular/router';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
   template: `
-    <header style="display:flex; align-items:center; justify-content:space-between; padding:16px 24px; border-bottom:1px solid #e0e0e0; position:sticky; top:0; background:#fff; z-index:10">
-      <div style="display:flex; align-items:center; gap:12px">
-        <div style="font-weight:700; font-size:18px;">ToyLog</div>
-        <nav style="display:flex; gap:12px;">
-          <a routerLink="/" style="text-decoration:none; color:#333; font-weight:600;">Home</a>
-          <a routerLink="/" fragment="features" style="text-decoration:none; color:#333;">Funcionalidades</a>
-          <a routerLink="/" fragment="contato" style="text-decoration:none; color:#333;">Contato</a>
+    <header class="topbar">
+      <div class="topbar__inner">
+        <div class="brand">
+          <div class="brand-logo">PM</div>
+          <div>
+            <div class="brand-name">PlayMove</div>
+            <div class="brand-sub">Aluguel de Brinquedos</div>
+          </div>
+        </div>
+        <nav class="menu">
+          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+          <a routerLink="/" fragment="catalogo">Brinquedos</a>
+          <a routerLink="/" fragment="contato">Contato</a>
+          <a *ngIf="!isLoggedIn()" routerLink="/login" class="btn-login">Login</a>
+
+          <div *ngIf="isLoggedIn()" class="dropdown" (mouseleave)="dropdownOpen=false">
+            <button class="btn-login" (click)="toggleDropdown()">
+              Perfil ▾
+            </button>
+            <div class="dropdown-menu" *ngIf="dropdownOpen">
+              <a routerLink="/perfil">Meu perfil</a>
+              <button (click)="logout()">Logout</button>
+            </div>
+          </div>
         </nav>
-      </div>
-      <div>
-        <a routerLink="/login" style="padding:8px 14px; background:#1976d2; color:#fff; border-radius:6px; text-decoration:none; font-weight:600;">Login</a>
       </div>
     </header>
 
@@ -27,4 +42,22 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   `,
   styleUrl: './app.css'
 })
-export class App {}
+export class App {
+  dropdownOpen = false;
+
+  constructor(private authService: AuthService, private router: Router) {}
+
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  logout() {
+    this.authService.logout();
+    this.dropdownOpen = false;
+    this.router.navigateByUrl('/');
+  }
+}

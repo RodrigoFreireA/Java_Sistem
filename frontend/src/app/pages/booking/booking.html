@@ -1,0 +1,22 @@
+<div class="booking-page">
+  <div class="card">
+    <h2>Agendamento</h2>
+    <div *ngIf="product" class="info">Brinquedo: {{product.name}}</div>
+    <div *ngIf="error" class="error">{{error}}</div>
+    <div *ngIf="success" class="success">Agendamento criado! No {{success}}</div>
+
+    <form (ngSubmit)="submit()" #bookingForm="ngForm" class="form">
+      <label>Data do evento
+        <input name="eventDate" [(ngModel)]="booking.eventDate" type="date" required />
+      </label>
+      <label>Observacoes
+        <textarea name="notes" [(ngModel)]="booking.notes" rows="3"></textarea>
+      </label>
+      <div class="actions">
+        <button type="submit" [disabled]="bookingForm.invalid || submitting" class="btn primary">
+          {{submitting ? 'Enviando...' : 'Confirmar agendamento'}}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

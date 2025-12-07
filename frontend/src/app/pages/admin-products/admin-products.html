@@ -1,0 +1,28 @@
+<div class="admin-products">
+  <div class="header">
+    <h2>Brinquedos cadastrados</h2>
+    <button (click)="load()" class="btn">Recarregar</button>
+  </div>
+  <div class="error" *ngIf="error">{{error}}</div>
+  <div class="muted" *ngIf="products.length === 0">Nenhum brinquedo encontrado.</div>
+  <table *ngIf="products.length > 0">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>SKU</th>
+        <th>Categoria</th>
+        <th>Preço (R$)</th>
+        <th>Estoque</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of products">
+        <td>{{p.name}}</td>
+        <td>{{p.sku}}</td>
+        <td>{{p.category}}</td>
+        <td>{{p.salePrice | number:'1.2-2'}}</td>
+        <td>{{p.stockQuantity}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,77 @@
+<div class="admin-page">
+  <h2>Admin - Brinquedos e Agendamentos</h2>
+
+  <section class="grid">
+    <div class="panel">
+      <h3>Agendamentos</h3>
+      <div class="error" *ngIf="bookingError">{{bookingError}}</div>
+      <div *ngFor="let b of bookings" class="booking-item">
+        <div><strong>{{b.productName}}</strong> - {{b.eventDate}}</div>
+        <div class="muted">{{b.customerName}} - {{b.phone}}</div>
+        <div class="muted small">{{b.status}}</div>
+      </div>
+      <div class="muted" *ngIf="bookings.length === 0">Nenhum agendamento.</div>
+    </div>
+
+    <div class="panel">
+      <h3>Adicionar brinquedo</h3>
+      <div class="error" *ngIf="productError">{{productError}}</div>
+      <form (ngSubmit)="createProduct()" #prodForm="ngForm" class="form">
+        <label>Nome do brinquedo
+          <input name="name" [(ngModel)]="product.name" placeholder="Ex: Castelo Pula-Pula" required />
+        </label>
+        <label>SKU (codigo unico)
+          <input name="sku" [(ngModel)]="product.sku" placeholder="Ex: PULA-001" required />
+        </label>
+        <label>Categoria
+          <input name="category" [(ngModel)]="product.category" placeholder="Ex: Inflaveis, Cama Elastica" />
+        </label>
+        <label>Descricao
+          <textarea name="description" [(ngModel)]="product.description" placeholder="Ex: Castelo inflavel colorido para ate 10 criancas." rows="2"></textarea>
+        </label>
+        <label>Preco de locacao (R$)
+          <input name="salePrice" [(ngModel)]="product.salePrice" type="number" step="0.01" placeholder="Ex: 550" required />
+        </label>
+        <label>Custo (R$)
+          <input name="costPrice" [(ngModel)]="product.costPrice" type="number" step="0.01" placeholder="Ex: 300" required />
+        </label>
+        <label>Quantidade em estoque
+          <input name="stockQuantity" [(ngModel)]="product.stockQuantity" type="number" placeholder="Ex: 5" required />
+        </label>
+        <label>Estoque minimo (alerta)
+          <input name="minStockLevel" [(ngModel)]="product.minStockLevel" type="number" placeholder="Ex: 2" required />
+        </label>
+        <button type="submit" [disabled]="prodForm.invalid" class="btn primary">Salvar</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="list-header">
+      <h3>Brinquedos cadastrados</h3>
+      <button (click)="loadProducts()" class="btn secondary">Recarregar</button>
+    </div>
+    <div class="error" *ngIf="productLoadError">{{productLoadError}}</div>
+    <div class="muted" *ngIf="products.length === 0">Nenhum brinquedo encontrado.</div>
+    <table *ngIf="products.length > 0">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>SKU</th>
+          <th>Categoria</th>
+          <th>Preço (R$)</th>
+          <th>Estoque</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of products">
+          <td>{{p.name}}</td>
+          <td>{{p.sku}}</td>
+          <td>{{p.category}}</td>
+          <td>{{p.salePrice | number:'1.2-2'}}</td>
+          <td>{{p.stockQuantity}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>

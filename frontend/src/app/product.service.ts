@@ -14,6 +14,10 @@ export class ProductService {
     return this.http.get<any[]>(this.base);
   }
 
+  getById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.base}/${id}`);
+  }
+
   lowStock(): Observable<any[]> {
     return this.http.get<any[]>(this.base + '/low-stock');
   }
@@ -22,7 +26,7 @@ export class ProductService {
     return this.http.post(`${this.apiBase}/orders`, req);
   }
 
-  createProduct(req: any): Observable<any> {
+  createProduct(req: any, _file?: File | null): Observable<any> {
     return this.http.post(this.base, req);
   }
 }

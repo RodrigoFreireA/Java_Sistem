@@ -1,0 +1,18 @@
+<div class="auth-card">
+  <h2>Entrar</h2>
+  <div class="form">
+    <label>Usuario
+      <input [(ngModel)]="username" placeholder="seu usuario" />
+    </label>
+    <label>Senha
+      <input [(ngModel)]="password" type="password" placeholder="senha" />
+    </label>
+    <button (click)="login()" class="btn primary">Login</button>
+    <div *ngIf="success" class="success">{{success}}</div>
+    <div *ngIf="error" class="error">{{error}}</div>
+    <div class="hint">Dicas: admin/adminpass para administrador</div>
+    <div class="hint">
+      Nao tem cadastro? <a routerLink="/register">Criar conta</a>
+    </div>
+  </div>
+ </div>

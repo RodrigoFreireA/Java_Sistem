@@ -1,0 +1,40 @@
+<div class="profile-page">
+  <div class="card">
+    <h2>Meu Perfil</h2>
+    <div *ngIf="error" class="error">{{error}}</div>
+    <div *ngIf="success" class="success">{{success}}</div>
+    <form (ngSubmit)="save()" #profileForm="ngForm" class="form">
+      <div class="grid">
+        <label>Nome
+          <input [(ngModel)]="form.name" name="name" required />
+        </label>
+        <label>Email
+          <input [(ngModel)]="form.email" name="email" type="email" required />
+        </label>
+      </div>
+      <label>Telefone
+        <input [(ngModel)]="form.phone" name="phone" required />
+      </label>
+      <label>Endereco
+        <input [(ngModel)]="form.addressLine" name="addressLine" required />
+      </label>
+      <div class="grid">
+        <label>Cidade
+          <input [(ngModel)]="form.city" name="city" required />
+        </label>
+        <label>Estado
+          <input [(ngModel)]="form.state" name="state" required />
+        </label>
+        <label>CEP
+          <input [(ngModel)]="form.postalCode" name="postalCode" required />
+        </label>
+      </div>
+      <label>Senha (preencha para alterar)
+        <input [(ngModel)]="form.password" name="password" type="password" />
+      </label>
+      <div class="actions">
+        <button class="btn primary" type="submit" [disabled]="profileForm.invalid">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>

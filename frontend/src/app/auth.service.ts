@@ -36,6 +36,12 @@ export class AuthService {
     );
   }
 
+  updateProfile(payload: any): Observable<any> {
+    return this.http.put(`${this.apiBase}/customers/me`, payload).pipe(
+      tap(profile => localStorage.setItem('toylog_profile', JSON.stringify(profile)))
+    );
+  }
+
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem('toylog_profile');

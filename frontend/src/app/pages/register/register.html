@@ -1,0 +1,36 @@
+<div class="auth-card">
+  <h2>Criar conta</h2>
+  <div class="form">
+    <label>Nome
+      <input [(ngModel)]="form.name" placeholder="Seu nome" required />
+    </label>
+    <label>Email (usuario)
+      <input [(ngModel)]="form.email" type="email" placeholder="email" required />
+    </label>
+    <label>Telefone
+      <input [(ngModel)]="form.phone" placeholder="(xx) xxxxx-xxxx" required />
+    </label>
+    <label>Senha
+      <input [(ngModel)]="form.password" type="password" placeholder="senha" />
+    </label>
+    <label>Endereço
+      <input [(ngModel)]="form.addressLine" placeholder="Rua, numero, complemento" />
+    </label>
+    <div class="grid">
+      <label>Cidade
+        <input [(ngModel)]="form.city" placeholder="Cidade" />
+      </label>
+      <label>Estado
+        <input [(ngModel)]="form.state" placeholder="Estado" />
+      </label>
+      <label>CEP
+        <input [(ngModel)]="form.postalCode" placeholder="CEP" required />
+      </label>
+    </div>
+    <button (click)="register()" class="btn primary">Registrar</button>
+    <div *ngIf="error" class="error">{{error}}</div>
+    <div class="hint">
+      Ja tem conta? <a routerLink="/login">Entrar</a>
+    </div>
+  </div>
+</div>
