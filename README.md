@@ -85,5 +85,3 @@ Observações e próximos compromissos:
 - Implementar `OrderService` com criação transacional de pedidos e rollback em caso de estoque insuficiente.
 - Adicionar autenticação JWT com `Spring Security` e fluxos para `Gerente` e `Vendedor`.
 - Melhorias: upload de imagem para produtos, indexação por SKU, e endpoints para relatórios de faturamento.
-
-# Java_Sistem
