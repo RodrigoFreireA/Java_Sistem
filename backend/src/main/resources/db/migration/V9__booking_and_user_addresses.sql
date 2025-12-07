@@ -1,0 +1,17 @@
+-- Add address snapshot to bookings
+ALTER TABLE tb_bookings
+    ADD COLUMN IF NOT EXISTS address_line VARCHAR(255),
+    ADD COLUMN IF NOT EXISTS city VARCHAR(120),
+    ADD COLUMN IF NOT EXISTS state VARCHAR(60),
+    ADD COLUMN IF NOT EXISTS postal_code VARCHAR(30);
+
+-- Add secondary/tertiary addresses to users (opcionais)
+ALTER TABLE tb_users
+    ADD COLUMN IF NOT EXISTS address_line2 VARCHAR(255),
+    ADD COLUMN IF NOT EXISTS city2 VARCHAR(120),
+    ADD COLUMN IF NOT EXISTS state2 VARCHAR(60),
+    ADD COLUMN IF NOT EXISTS postal_code2 VARCHAR(30),
+    ADD COLUMN IF NOT EXISTS address_line3 VARCHAR(255),
+    ADD COLUMN IF NOT EXISTS city3 VARCHAR(120),
+    ADD COLUMN IF NOT EXISTS state3 VARCHAR(60),
+    ADD COLUMN IF NOT EXISTS postal_code3 VARCHAR(30);

@@ -55,6 +55,14 @@ public class UserAccountService {
         dto.state = user.getState();
         dto.postalCode = user.getPostalCode();
         dto.addressComplete = user.isAddressComplete();
+        dto.addressLine2 = user.getAddressLine2();
+        dto.city2 = user.getCity2();
+        dto.state2 = user.getState2();
+        dto.postalCode2 = user.getPostalCode2();
+        dto.addressLine3 = user.getAddressLine3();
+        dto.city3 = user.getCity3();
+        dto.state3 = user.getState3();
+        dto.postalCode3 = user.getPostalCode3();
         return dto;
     }
 
@@ -69,6 +77,14 @@ public class UserAccountService {
         user.setCity(req.city);
         user.setState(req.state);
         user.setPostalCode(req.postalCode);
+        user.setAddressLine2(req.addressLine2);
+        user.setCity2(req.city2);
+        user.setState2(req.state2);
+        user.setPostalCode2(req.postalCode2);
+        user.setAddressLine3(req.addressLine3);
+        user.setCity3(req.city3);
+        user.setState3(req.state3);
+        user.setPostalCode3(req.postalCode3);
         if (req.password != null && !req.password.isBlank()) {
             user.setPassword(passwordEncoder.encode(req.password));
         }

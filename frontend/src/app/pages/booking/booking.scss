@@ -23,6 +23,20 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px;
+  width: 100%;
+  min-height: 90px;
+}
+.form select {
+  background: var(--surface-alt);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+}
+.form .grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 }
 .actions {
   text-align: right;

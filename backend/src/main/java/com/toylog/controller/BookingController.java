@@ -47,6 +47,10 @@ public class BookingController {
         dto.productId = b.getProduct().getId();
         dto.productName = b.getProduct().getName();
         dto.notes = b.getNotes();
+        dto.addressLine = b.getAddressLine();
+        dto.city = b.getCity();
+        dto.state = b.getState();
+        dto.postalCode = b.getPostalCode();
         dto.status = b.getStatus();
         dto.createdAt = b.getCreatedAt();
         return dto;

@@ -13,4 +13,9 @@ public class CreateBookingRequest {
     @NotNull
     public UUID productId;
     public String notes;
+    // endereco opcional para o agendamento; se vazio, usa o do perfil
+    public String addressLine;
+    public String city;
+    public String state;
+    public String postalCode;
 }

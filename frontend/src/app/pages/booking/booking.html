@@ -9,6 +9,28 @@
       <label>Data do evento
         <input name="eventDate" [(ngModel)]="booking.eventDate" type="date" required />
       </label>
+
+      <label>Endereço para entrega/montagem
+        <select [ngModel]="selectedAddress" (ngModelChange)="onAddressChange($event)" name="addressSelect">
+          <option *ngFor="let a of addresses" [value]="a.value">{{a.label}}</option>
+        </select>
+      </label>
+
+      <label>Endereço
+        <input name="addressLine" [(ngModel)]="booking.addressLine" placeholder="Rua, numero, complemento" required />
+      </label>
+      <div class="grid">
+        <label>Cidade
+          <input name="city" [(ngModel)]="booking.city" required />
+        </label>
+        <label>Estado
+          <input name="state" [(ngModel)]="booking.state" required />
+        </label>
+        <label>CEP
+          <input name="postalCode" [(ngModel)]="booking.postalCode" required />
+        </label>
+      </div>
+
       <label>Observacoes
         <textarea name="notes" [(ngModel)]="booking.notes" rows="3"></textarea>
       </label>

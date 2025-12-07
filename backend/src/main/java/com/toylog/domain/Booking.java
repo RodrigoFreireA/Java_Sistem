@@ -41,6 +41,11 @@ public class Booking {
 
     private String notes;
 
+    private String addressLine;
+    private String city;
+    private String state;
+    private String postalCode;
+
     @Enumerated(EnumType.STRING)
     private BookingStatus status = BookingStatus.PENDING;
 
@@ -67,6 +72,14 @@ public class Booking {
     public void setCustomer(UserAccount customer) { this.customer = customer; }
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
+    public String getAddressLine() { return addressLine; }
+    public void setAddressLine(String addressLine) { this.addressLine = addressLine; }
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
+    public String getState() { return state; }
+    public void setState(String state) { this.state = state; }
+    public String getPostalCode() { return postalCode; }
+    public void setPostalCode(String postalCode) { this.postalCode = postalCode; }
     public BookingStatus getStatus() { return status; }
     public void setStatus(BookingStatus status) { this.status = status; }
     public Instant getCreatedAt() { return createdAt; }

@@ -29,6 +29,35 @@
           <input [(ngModel)]="form.postalCode" name="postalCode" required />
         </label>
       </div>
+      <div class="separator">Endereços adicionais (opcionais)</div>
+      <label>Endereço 2
+        <input [(ngModel)]="form.addressLine2" name="addressLine2" placeholder="Opcional" />
+      </label>
+      <div class="grid">
+        <label>Cidade
+          <input [(ngModel)]="form.city2" name="city2" placeholder="Opcional" />
+        </label>
+        <label>Estado
+          <input [(ngModel)]="form.state2" name="state2" placeholder="Opcional" />
+        </label>
+        <label>CEP
+          <input [(ngModel)]="form.postalCode2" name="postalCode2" placeholder="Opcional" />
+        </label>
+      </div>
+      <label>Endereço 3
+        <input [(ngModel)]="form.addressLine3" name="addressLine3" placeholder="Opcional" />
+      </label>
+      <div class="grid">
+        <label>Cidade
+          <input [(ngModel)]="form.city3" name="city3" placeholder="Opcional" />
+        </label>
+        <label>Estado
+          <input [(ngModel)]="form.state3" name="state3" placeholder="Opcional" />
+        </label>
+        <label>CEP
+          <input [(ngModel)]="form.postalCode3" name="postalCode3" placeholder="Opcional" />
+        </label>
+      </div>
       <label>Senha (preencha para alterar)
         <input [(ngModel)]="form.password" name="password" type="password" />
       </label>

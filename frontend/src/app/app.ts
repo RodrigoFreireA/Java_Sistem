@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterOutlet, Router, RouterLinkActive } from '@angular/router';
 import { AuthService } from './auth.service';
@@ -23,12 +23,12 @@ import { AuthService } from './auth.service';
           <a routerLink="/" fragment="contato">Contato</a>
           <a *ngIf="!isLoggedIn()" routerLink="/login" class="btn-login">Login</a>
 
-          <div *ngIf="isLoggedIn()" class="dropdown" (mouseleave)="dropdownOpen=false">
-            <button class="btn-login" (click)="toggleDropdown()">
-              Perfil ▾
+          <div *ngIf="isLoggedIn()" class="dropdown">
+            <button class="btn-login" (click)="toggleDropdown($event)">
+              Perfil
             </button>
             <div class="dropdown-menu" *ngIf="dropdownOpen">
-              <a routerLink="/perfil">Meu perfil</a>
+              <a routerLink="/perfil" (click)="closeDropdown()">Meu perfil</a>
               <button (click)="logout()">Logout</button>
             </div>
           </div>
@@ -47,17 +47,27 @@ export class App {
 
   constructor(private authService: AuthService, private router: Router) {}
 
+  @HostListener('document:click')
+  onDocumentClick() {
+    this.dropdownOpen = false;
+  }
+
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }
 
-  toggleDropdown() {
+  toggleDropdown(event: MouseEvent) {
+    event.stopPropagation();
     this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  closeDropdown() {
+    this.dropdownOpen = false;
   }
 
   logout() {
     this.authService.logout();
-    this.dropdownOpen = false;
+    this.closeDropdown();
     this.router.navigateByUrl('/');
   }
 }

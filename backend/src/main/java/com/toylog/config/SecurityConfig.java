@@ -51,7 +51,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/products").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/products").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/products/low-stock").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/api/products/**/decrease").hasRole("ADMIN")
+                // single product id decrease endpoint; PathPatternParser does not allow ** followed by segments
+                .requestMatchers(HttpMethod.POST, "/api/products/*/decrease").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/orders").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/bookings").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/bookings").hasRole("CUSTOMER")

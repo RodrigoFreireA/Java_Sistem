@@ -19,11 +19,13 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final ProductRepository productRepository;
     private final UserAccountRepository userAccountRepository;
+    private final ProductService productService;
 
-    public BookingService(BookingRepository bookingRepository, ProductRepository productRepository, UserAccountRepository userAccountRepository) {
+    public BookingService(BookingRepository bookingRepository, ProductRepository productRepository, UserAccountRepository userAccountRepository, ProductService productService) {
         this.bookingRepository = bookingRepository;
         this.productRepository = productRepository;
         this.userAccountRepository = userAccountRepository;
+        this.productService = productService;
     }
 
     @Transactional
@@ -35,10 +37,6 @@ public class BookingService {
         var customer = userAccountRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + username));
 
-        if (!customer.isAddressComplete()) {
-            throw new IllegalArgumentException("Complete seu endereço antes de agendar");
-        }
-
         Booking booking = new Booking();
         booking.setCustomerName(customer.getName());
         booking.setPhone(customer.getPhone());
@@ -48,10 +46,29 @@ public class BookingService {
         booking.setNotes(req.notes);
         booking.setCustomer(customer);
 
+        String useAddress = notBlank(req.addressLine) ? req.addressLine : customer.getAddressLine();
+        String useCity = notBlank(req.city) ? req.city : customer.getCity();
+        String useState = notBlank(req.state) ? req.state : customer.getState();
+        String usePostal = notBlank(req.postalCode) ? req.postalCode : customer.getPostalCode();
+        if (!notBlank(useAddress) || !notBlank(useCity) || !notBlank(useState) || !notBlank(usePostal)) {
+            throw new IllegalArgumentException("Informe um endereco completo para o agendamento");
+        }
+        booking.setAddressLine(useAddress);
+        booking.setCity(useCity);
+        booking.setState(useState);
+        booking.setPostalCode(usePostal);
+
+        // cada agendamento consome 1 unidade de estoque
+        productService.decreaseStock(product.getId(), 1, username);
+
         return bookingRepository.save(booking);
     }
 
     public List<Booking> listAll() {
         return bookingRepository.findAll();
+    }
+
+    private boolean notBlank(String v) {
+        return v != null && !v.isBlank();
     }
 }

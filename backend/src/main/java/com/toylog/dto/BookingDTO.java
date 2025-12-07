@@ -15,6 +15,10 @@ public class BookingDTO {
     public UUID productId;
     public String productName;
     public String notes;
+    public String addressLine;
+    public String city;
+    public String state;
+    public String postalCode;
     public BookingStatus status;
     public Instant createdAt;
 }

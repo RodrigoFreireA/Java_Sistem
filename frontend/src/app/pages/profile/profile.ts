@@ -20,7 +20,15 @@ export class Profile implements OnInit {
     city: '',
     state: '',
     postalCode: '',
-    password: ''
+    password: '',
+    addressLine2: '',
+    city2: '',
+    state2: '',
+    postalCode2: '',
+    addressLine3: '',
+    city3: '',
+    state3: '',
+    postalCode3: ''
   };
   error = '';
   success = '';
@@ -47,6 +55,14 @@ export class Profile implements OnInit {
           city: profile?.city || '',
           state: profile?.state || '',
           postalCode: profile?.postalCode || '',
+          addressLine2: profile?.addressLine2 || '',
+          city2: profile?.city2 || '',
+          state2: profile?.state2 || '',
+          postalCode2: profile?.postalCode2 || '',
+          addressLine3: profile?.addressLine3 || '',
+          city3: profile?.city3 || '',
+          state3: profile?.state3 || '',
+          postalCode3: profile?.postalCode3 || '',
           password: ''
         };
       },
