@@ -23,11 +23,13 @@ export class Register {
     postalCode: ''
   };
   error = '';
+  success = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
   register() {
     this.error = '';
+    this.success = '';
     if (!this.form.name || !this.form.email || !this.form.phone || !this.form.postalCode) {
       this.error = 'Preencha nome, email, telefone e CEP.';
       return;
@@ -43,7 +45,10 @@ export class Register {
       state: this.form.state,
       postalCode: this.form.postalCode
     }).subscribe({
-      next: () => this.router.navigateByUrl('/'),
+      next: () => {
+        this.success = 'Conta criada com sucesso! Você já está logado.';
+        setTimeout(() => this.router.navigateByUrl('/'), 1200);
+      },
       error: (err) => this.error = err?.error?.message || 'Erro ao registrar'
     });
   }

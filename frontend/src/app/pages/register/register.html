@@ -4,8 +4,8 @@
     <label>Nome
       <input [(ngModel)]="form.name" placeholder="Seu nome" required />
     </label>
-    <label>Email (usuario)
-      <input [(ngModel)]="form.email" type="email" placeholder="email" required />
+    <label>Email (login)
+      <input [(ngModel)]="form.email" type="email" placeholder="seu email (login)" required />
     </label>
     <label>Telefone
       <input [(ngModel)]="form.phone" placeholder="(xx) xxxxx-xxxx" required />
@@ -28,6 +28,7 @@
       </label>
     </div>
     <button (click)="register()" class="btn primary">Registrar</button>
+    <div *ngIf="success" class="success">{{success}}</div>
     <div *ngIf="error" class="error">{{error}}</div>
     <div class="hint">
       Ja tem conta? <a routerLink="/login">Entrar</a>

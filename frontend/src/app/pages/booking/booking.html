@@ -1,4 +1,4 @@
-<div class="booking-page">
+<div class="booking-page page">
   <div class="card">
     <h2>Agendamento</h2>
     <div *ngIf="product" class="info">Brinquedo: {{product.name}}</div>
@@ -13,7 +13,7 @@
         <textarea name="notes" [(ngModel)]="booking.notes" rows="3"></textarea>
       </label>
       <div class="actions">
-        <button type="submit" [disabled]="bookingForm.invalid || submitting" class="btn primary">
+        <button type="submit" [disabled]="bookingForm.invalid || submitting" class="btn-primary">
           {{submitting ? 'Enviando...' : 'Confirmar agendamento'}}
         </button>
       </div>

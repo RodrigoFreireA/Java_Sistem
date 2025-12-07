@@ -18,13 +18,8 @@ export class Home implements OnInit, OnDestroy {
   filteredCards: any[] = [];
   loadError = '';
 
-  categories = [
-    { name: 'Todos os Brinquedos', count: 12, active: true },
-    { name: 'Brinquedos Aquaticos', count: 4, active: false },
-    { name: 'Diversao para Todas as Idades', count: 3, active: false },
-    { name: 'Cama Elastica', count: 2, active: false },
-    { name: 'Jogos de Mesa', count: 2, active: false },
-    { name: 'Linha Home', count: 1, active: false }
+  categories: { name: string; count: number; active: boolean }[] = [
+    { name: 'Todos os Brinquedos', count: 0, active: true }
   ];
 
   slides = [
@@ -77,6 +72,7 @@ export class Home implements OnInit, OnDestroy {
       next: (data) => {
         this.products = data || [];
         this.cards = this.buildCards(this.products);
+        this.categories = this.buildCategories(this.products);
         this.filteredCards = this.cards;
       },
       error: (err) => {
@@ -125,6 +121,17 @@ export class Home implements OnInit, OnDestroy {
       ageRange: p.ageRange || '',
       size: p.size || ''
     }));
+  }
+
+  private buildCategories(products: any[]) {
+    const counts: Record<string, number> = {};
+    (products || []).forEach(p => {
+      const cat = (p.category || 'Outros').trim();
+      counts[cat] = (counts[cat] || 0) + 1;
+    });
+    const list = Object.keys(counts).map(name => ({ name, count: counts[name], active: false }));
+    const allCount = list.reduce((sum, c) => sum + c.count, 0);
+    return [{ name: 'Todos os Brinquedos', count: allCount, active: true }, ...list];
   }
 
   filterByCategory(catName: string) {

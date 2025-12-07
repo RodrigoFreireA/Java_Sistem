@@ -4,13 +4,15 @@
   max-width: 720px;
   margin: 32px auto;
   padding: 16px;
+  color: var(--text);
 }
 
 .card {
-  border: 1px solid #e0e0e0;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 12px;
-  background: #fff;
   padding: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
 }
 
 .form {
@@ -27,9 +29,11 @@
 
 .form input {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-alt);
+  color: var(--text);
 }
 
 .actions {
@@ -38,12 +42,12 @@
 
 .btn.primary {
   padding: 10px 16px;
-  background: #1976d2;
+  background: var(--primary);
   color: #fff;
   border: none;
   border-radius: 8px;
   cursor: pointer;
 }
 
-.error { color: #d32f2f; margin-bottom: 8px; }
-.success { color: #2e7d32; margin-bottom: 8px; }
+.error { color: #f87171; margin-bottom: 8px; }
+.success { color: #22c55e; margin-bottom: 8px; }
