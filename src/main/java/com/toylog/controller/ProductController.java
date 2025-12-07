@@ -51,10 +51,10 @@ public class ProductController {
 
     @GetMapping("/low-stock")
     public List<ProductDTO> lowStock() {
-        List<Product> list = productRepository.findAll().stream()
-                .filter(p -> p.getStockQuantity() < p.getMinStockLevel())
+        return productRepository.findLowStock()
+                .stream()
+                .map(this::toDTO)
                 .collect(Collectors.toList());
-        return list.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     @PostMapping("/{id}/decrease")

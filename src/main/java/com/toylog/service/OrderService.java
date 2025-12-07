@@ -45,6 +45,7 @@ public class OrderService {
             productService.decreaseStock(productId, qty, req.username == null ? "system" : req.username);
         }
 
+        order.setTotal(order.calculateTotal());
         return orderRepository.save(order);
     }
 }

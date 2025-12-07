@@ -40,7 +40,7 @@ class ProductServiceTest {
         p.setCostPrice(BigDecimal.valueOf(10));
         p.setSalePrice(BigDecimal.valueOf(15));
 
-        when(productRepository.findById(id)).thenReturn(Optional.of(p));
+        when(productRepository.findByIdForUpdate(id)).thenReturn(Optional.of(p));
 
         assertThrows(InsufficientStockException.class, () -> productService.decreaseStock(id, 3, "vendedor"));
 

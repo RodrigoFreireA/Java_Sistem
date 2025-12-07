@@ -34,3 +34,4 @@ frontend/.vscode/*
 *~
 .env
 .env.local
+.vscode/

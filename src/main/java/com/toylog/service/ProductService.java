@@ -23,7 +23,7 @@ public class ProductService {
 
     @Transactional
     public void decreaseStock(UUID productId, int quantity, String username) {
-        Product product = productRepository.findById(productId)
+        Product product = productRepository.findByIdForUpdate(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found: " + productId));
 
         if (quantity <= 0) throw new IllegalArgumentException("Quantity must be positive");

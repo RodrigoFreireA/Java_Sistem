@@ -25,17 +25,23 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItem> items = new HashSet<>();
 
+    @Column(name = "total", precision = 14, scale = 2)
+    private BigDecimal total = BigDecimal.ZERO;
+
     public Order() {
         this.id = UUID.randomUUID();
         this.moment = Instant.now();
         this.status = OrderStatus.WAITING_PAYMENT;
     }
 
-    public BigDecimal getTotal() {
+    public BigDecimal calculateTotal() {
         return items.stream()
                 .map(i -> i.getUnitPrice().multiply(BigDecimal.valueOf(i.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
+    public BigDecimal getTotal() { return total; }
+    public void setTotal(BigDecimal total) { this.total = total; }
 
     // Getters and setters
     public UUID getId() { return id; }
