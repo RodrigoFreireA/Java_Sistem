@@ -16,4 +16,16 @@ export class BookingService {
   listAll(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiBase}/bookings`);
   }
+
+  listMine(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiBase}/bookings/my`);
+  }
+
+  updateBooking(id: string, req: any): Observable<any> {
+    return this.http.patch(`${this.apiBase}/bookings/${id}`, req);
+  }
+
+  deleteBooking(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiBase}/bookings/${id}`);
+  }
 }

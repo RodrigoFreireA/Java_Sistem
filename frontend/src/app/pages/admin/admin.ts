@@ -17,6 +17,8 @@ export class Admin implements OnInit {
   productError = '';
   productLoadError = '';
   products: any[] = [];
+  editingId: string | null = null;
+  editForm: any = { eventDate: '', status: 'PENDING', notes: '' };
   product: any = {
     name: '',
     sku: '',
@@ -65,6 +67,46 @@ export class Admin implements OnInit {
         this.loadProducts();
       },
       error: (err) => this.productError = err?.error?.message || 'Erro ao salvar'
+    });
+  }
+
+  startEdit(booking: any) {
+    this.bookingError = '';
+    this.editingId = booking.id;
+    this.editForm = {
+      eventDate: booking.eventDate,
+      status: booking.status,
+      notes: booking.notes || ''
+    };
+  }
+
+  cancelEdit() {
+    this.editingId = null;
+  }
+
+  saveEdit() {
+    if (!this.editingId) return;
+    this.bookingError = '';
+    this.bookingService.updateBooking(this.editingId, {
+      eventDate: this.editForm.eventDate,
+      status: this.editForm.status,
+      notes: this.editForm.notes
+    }).subscribe({
+      next: () => {
+        this.editingId = null;
+        this.loadBookings();
+      },
+      error: (err) => this.bookingError = err?.error?.message || 'Erro ao atualizar agendamento'
+    });
+  }
+
+  deleteBooking(id: string) {
+    const confirmed = window.confirm('Deseja realmente excluir este agendamento?');
+    if (!confirmed) return;
+    this.bookingError = '';
+    this.bookingService.deleteBooking(id).subscribe({
+      next: () => this.loadBookings(),
+      error: (err) => this.bookingError = err?.error?.message || 'Erro ao excluir agendamento'
     });
   }
 }

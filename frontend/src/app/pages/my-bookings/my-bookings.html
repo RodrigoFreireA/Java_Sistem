@@ -1,0 +1,19 @@
+<div class="page my-bookings">
+  <h2>Meus agendamentos</h2>
+  <div class="muted" *ngIf="loading">Carregando...</div>
+  <div class="error" *ngIf="error">{{error}}</div>
+  <div class="muted" *ngIf="!loading && bookings.length === 0">Nenhum agendamento encontrado.</div>
+
+  <div class="cards" *ngIf="bookings.length > 0">
+    <div class="card" *ngFor="let b of bookings">
+      <div class="card-title">{{b.productName}}</div>
+      <div class="card-meta">{{b.eventDate}}</div>
+      <div class="card-meta">{{b.addressLine}}, {{b.city}} - {{b.state}} ({{b.postalCode}})</div>
+      <div class="card-meta">Notas: {{b.notes || 'Sem observacoes'}}</div>
+      <div class="status" [class.pending]="b.status==='PENDING'" [class.confirmed]="b.status==='CONFIRMED'" [class.cancelled]="b.status==='CANCELLED'">
+        {{b.status === 'PENDING' ? 'Pendente' : b.status === 'CONFIRMED' ? 'Confirmado' : 'Cancelado'}}
+      </div>
+      <div class="small muted">Criado em {{b.createdAt | date:'short'}}</div>
+    </div>
+  </div>
+</div>

@@ -3,6 +3,7 @@ package com.toylog.controller;
 import com.toylog.domain.Booking;
 import com.toylog.dto.BookingDTO;
 import com.toylog.dto.CreateBookingRequest;
+import com.toylog.dto.UpdateBookingRequest;
 import com.toylog.service.BookingService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,27 @@ public class BookingController {
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/my")
+    public List<BookingDTO> listMine() {
+        return bookingService.listMine()
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @PatchMapping("/{id}")
+    public BookingDTO update(@PathVariable("id") java.util.UUID id,
+                             @Valid @RequestBody UpdateBookingRequest req) {
+        Booking updated = bookingService.update(id, req);
+        return toDTO(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") java.util.UUID id) {
+        bookingService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     private BookingDTO toDTO(Booking b) {

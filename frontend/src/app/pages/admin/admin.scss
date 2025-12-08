@@ -49,3 +49,60 @@ thead tr { border-bottom: 1px solid var(--border); }
   justify-content: space-between;
   margin-bottom: 8px;
 }
+
+.booking-item {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: var(--surface-alt, #121826);
+}
+.booking-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.booking-actions {
+  display: flex;
+  gap: 6px;
+}
+.btn-compact {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+.btn-compact:hover { background: #1c2335; }
+.btn-danger {
+  background: #b91c1c;
+  color: #fff;
+  border-color: #ef4444;
+}
+.btn-danger:hover { background: #991b1b; }
+
+.edit-card {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #0c1322;
+  border: 1px dashed var(--border);
+  display: grid;
+  gap: 8px;
+}
+.edit-card input,
+.edit-card select,
+.edit-card textarea {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  padding: 8px;
+}
+.edit-actions {
+  display: flex;
+  gap: 8px;
+}

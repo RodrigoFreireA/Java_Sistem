@@ -3,6 +3,7 @@ package com.toylog.service;
 import com.toylog.domain.Booking;
 import com.toylog.domain.Product;
 import com.toylog.dto.CreateBookingRequest;
+import com.toylog.dto.UpdateBookingRequest;
 import com.toylog.repository.BookingRepository;
 import com.toylog.repository.ProductRepository;
 import com.toylog.repository.UserAccountRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class BookingService {
@@ -66,6 +68,37 @@ public class BookingService {
 
     public List<Booking> listAll() {
         return bookingRepository.findAll();
+    }
+
+    @Transactional
+    public Booking update(UUID id, UpdateBookingRequest req) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Booking not found: " + id));
+
+        if (req.eventDate != null) {
+            booking.setEventDate(req.eventDate);
+        }
+        if (req.status != null) {
+            booking.setStatus(req.status);
+        }
+        if (req.notes != null) {
+            booking.setNotes(req.notes);
+        }
+        return bookingRepository.save(booking);
+    }
+
+    public void delete(UUID id) {
+        if (!bookingRepository.existsById(id)) {
+            throw new EntityNotFoundException("Booking not found: " + id);
+        }
+        bookingRepository.deleteById(id);
+    }
+
+    public List<Booking> listMine() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        var customer = userAccountRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found: " + username));
+        return bookingRepository.findByCustomerId(customer.getId());
     }
 
     private boolean notBlank(String v) {

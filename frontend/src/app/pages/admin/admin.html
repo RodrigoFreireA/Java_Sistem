@@ -6,9 +6,37 @@
       <h3>Agendamentos</h3>
       <div class="error" *ngIf="bookingError">{{bookingError}}</div>
       <div *ngFor="let b of bookings" class="booking-item">
-        <div><strong>{{b.productName}}</strong> - {{b.eventDate}}</div>
-        <div class="muted">{{b.customerName}} - {{b.phone}}</div>
-        <div class="muted small">{{b.status}}</div>
+        <div class="booking-header">
+          <div>
+            <div><strong>{{b.productName}}</strong> - {{b.eventDate}}</div>
+            <div class="muted">{{b.customerName}} - {{b.phone}}</div>
+            <div class="muted small">{{b.status}}</div>
+          </div>
+          <div class="booking-actions">
+            <button class="btn-secondary btn-compact" (click)="startEdit(b)">Alterar</button>
+            <button class="btn-danger btn-compact" (click)="deleteBooking(b.id)">Excluir</button>
+          </div>
+        </div>
+
+        <div class="edit-card" *ngIf="editingId === b.id">
+          <label>Data do evento
+            <input type="date" [(ngModel)]="editForm.eventDate" [ngModelOptions]="{standalone: true}" />
+          </label>
+          <label>Status
+            <select [(ngModel)]="editForm.status" [ngModelOptions]="{standalone: true}">
+              <option value="PENDING">Pendente</option>
+              <option value="CONFIRMED">Confirmado</option>
+              <option value="CANCELLED">Cancelado</option>
+            </select>
+          </label>
+          <label>Observações
+            <textarea rows="2" [(ngModel)]="editForm.notes" [ngModelOptions]="{standalone: true}"></textarea>
+          </label>
+          <div class="edit-actions">
+            <button class="btn-primary btn-compact" (click)="saveEdit()">Salvar</button>
+            <button class="btn-secondary btn-compact" type="button" (click)="cancelEdit()">Cancelar</button>
+          </div>
+        </div>
       </div>
       <div class="muted" *ngIf="bookings.length === 0">Nenhum agendamento.</div>
     </div>

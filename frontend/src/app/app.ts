@@ -29,6 +29,7 @@ import { AuthService } from './auth.service';
             </button>
             <div class="dropdown-menu" *ngIf="dropdownOpen">
               <a routerLink="/perfil" (click)="closeDropdown()">Meu perfil</a>
+              <a routerLink="/meus-agendamentos" (click)="closeDropdown()">Meus agendamentos</a>
               <button (click)="logout()">Logout</button>
             </div>
           </div>
