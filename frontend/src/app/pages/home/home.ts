@@ -24,21 +24,21 @@ export class Home implements OnInit, OnDestroy {
 
   slides = [
     {
-      image: 'https://images.unsplash.com/photo-1504691342899-4d92b50853e1?auto=format&fit=crop&w=1400&q=60',
+      image: 'images/carousel1.png',
       badge: 'Aluguel de brinquedos',
       title1: 'Diversao garantida',
       title2: 'para sua festa!',
       subtitle: 'Brinquedos inflaveis e camas elasticas com qualidade premium.'
     },
     {
-      image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=60',
+      image: 'images/carousel2.png',
       badge: 'Seguranca e alegria',
       title1: 'Camas elasticas',
       title2: 'para todas as idades',
       subtitle: 'Montagem rapida e equipe especializada.'
     },
     {
-      image: 'https://images.unsplash.com/photo-1582719478248-54e9f2af39d7?auto=format&fit=crop&w=1400&q=60',
+      image: 'images/carousel3.png',
       badge: 'Festas inesqueciveis',
       title1: 'Castelos e tobogas',
       title2: 'coloridos e seguros',

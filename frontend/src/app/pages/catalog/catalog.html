@@ -1,0 +1,42 @@
+<div class="catalog-page page">
+  <div class="catalog-header">
+    <h2>Catálogo de brinquedos</h2>
+    <div class="muted">Escolha um brinquedo para ver detalhes e agendar.</div>
+  </div>
+
+  <div class="error" *ngIf="error">{{error}}</div>
+
+  <div class="catalog-layout">
+    <aside class="categories">
+      <div class="cat-title">Categorias</div>
+      <ul>
+        <li *ngFor="let cat of categories" (click)="filterByCategory(cat.name)" [class.active]="cat.active">
+          <span>{{cat.name}}</span>
+          <span class="pill">{{cat.count}}</span>
+        </li>
+      </ul>
+    </aside>
+
+    <div class="cards">
+      <div class="count">Mostrando {{filtered.length}} brinquedos</div>
+      <div class="empty" *ngIf="filtered.length === 0">Nenhum brinquedo encontrado.</div>
+      <div class="grid" *ngIf="filtered.length > 0">
+        <div class="card" *ngFor="let p of filtered" (click)="goToDetail(p)">
+          <div class="card-img">
+            <img [src]="p.imageUrl || 'https://via.placeholder.com/400x250?text=Brinquedo'" [alt]="p.name" />
+            <div class="tag age" *ngIf="p.ageRange">{{p.ageRange}}</div>
+            <div class="tag size" *ngIf="p.size">{{p.size}}</div>
+          </div>
+          <div class="card-body">
+            <div class="card-title">{{p.name}}</div>
+            <div class="card-cat">{{p.category}}</div>
+            <div class="card-bottom">
+              <span class="price">R$ {{p.salePrice | number:'1.0-0'}}</span>
+              <span class="stock">Estoque: {{p.stockQuantity}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

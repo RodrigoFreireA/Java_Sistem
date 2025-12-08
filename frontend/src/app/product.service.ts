@@ -29,4 +29,12 @@ export class ProductService {
   createProduct(req: any, _file?: File | null): Observable<any> {
     return this.http.post(this.base, req);
   }
+
+  updateProduct(id: string, req: any): Observable<any> {
+    return this.http.put(`${this.base}/${id}`, req);
+  }
+
+  deleteProduct(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.base}/${id}`);
+  }
 }

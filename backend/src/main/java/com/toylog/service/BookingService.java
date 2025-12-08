@@ -1,6 +1,7 @@
 package com.toylog.service;
 
 import com.toylog.domain.Booking;
+import com.toylog.domain.BookingStatus;
 import com.toylog.domain.Product;
 import com.toylog.dto.CreateBookingRequest;
 import com.toylog.dto.UpdateBookingRequest;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.Arrays;
 
 @Service
 public class BookingService {
@@ -34,6 +36,8 @@ public class BookingService {
     public Booking create(CreateBookingRequest req) {
         Product product = productRepository.findById(req.productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found: " + req.productId));
+
+        ensureAvailability(product, req.eventDate, null, BookingStatus.PENDING);
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         var customer = userAccountRepository.findByUsername(username)
@@ -60,9 +64,6 @@ public class BookingService {
         booking.setState(useState);
         booking.setPostalCode(usePostal);
 
-        // cada agendamento consome 1 unidade de estoque
-        productService.decreaseStock(product.getId(), 1, username);
-
         return bookingRepository.save(booking);
     }
 
@@ -75,6 +76,13 @@ public class BookingService {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Booking not found: " + id));
 
+        BookingStatus oldStatus = booking.getStatus();
+        java.time.LocalDate oldDate = booking.getEventDate();
+        var targetStatus = req.status != null ? req.status : booking.getStatus();
+        var targetDate = req.eventDate != null ? req.eventDate : booking.getEventDate();
+
+        ensureAvailability(booking.getProduct(), targetDate, booking, targetStatus);
+
         if (req.eventDate != null) {
             booking.setEventDate(req.eventDate);
         }
@@ -84,7 +92,19 @@ public class BookingService {
         if (req.notes != null) {
             booking.setNotes(req.notes);
         }
-        return bookingRepository.save(booking);
+        Booking saved = bookingRepository.save(booking);
+
+        // Ajusta estoque somente no momento de confirmar/cancelar
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean wasConfirmed = oldStatus == BookingStatus.CONFIRMED;
+        boolean nowConfirmed = saved.getStatus() == BookingStatus.CONFIRMED;
+        if (!wasConfirmed && nowConfirmed) {
+            productService.decreaseStock(saved.getProduct().getId(), 1, username);
+        } else if (wasConfirmed && saved.getStatus() == BookingStatus.CANCELLED) {
+            productService.increaseStock(saved.getProduct().getId(), 1, username);
+        }
+
+        return saved;
     }
 
     public void delete(UUID id) {
@@ -103,5 +123,30 @@ public class BookingService {
 
     private boolean notBlank(String v) {
         return v != null && !v.isBlank();
+    }
+
+    /**
+     * Ensure product has capacity for the given date considering active bookings.
+     * If updating an existing booking, it will exclude the current booking from the count when applicable.
+     */
+    private void ensureAvailability(Product product, java.time.LocalDate eventDate, Booking currentBooking, BookingStatus targetStatus) {
+        List<BookingStatus> activeStatuses = Arrays.asList(BookingStatus.PENDING, BookingStatus.CONFIRMED);
+        boolean targetIsActive = activeStatuses.contains(targetStatus);
+
+        // If target is cancelled, no need to check capacity (it frees a slot)
+        if (!targetIsActive) return;
+
+        int activeForDate = bookingRepository.countByProductIdAndEventDateAndStatusIn(product.getId(), eventDate, activeStatuses);
+
+        // Exclude current booking from the count if it was already active on this same date
+        if (currentBooking != null
+                && activeStatuses.contains(currentBooking.getStatus())
+                && currentBooking.getEventDate().equals(eventDate)) {
+            activeForDate -= 1;
+        }
+
+        if (activeForDate >= product.getStockQuantity()) {
+            throw new IllegalArgumentException("Brinquedo sem disponibilidade na data selecionada");
+        }
     }
 }

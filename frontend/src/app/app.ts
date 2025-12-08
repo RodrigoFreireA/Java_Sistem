@@ -2,11 +2,12 @@ import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterOutlet, Router, RouterLinkActive } from '@angular/router';
 import { AuthService } from './auth.service';
+import { Footer } from './footer/footer';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, Footer],
   template: `
     <header class="topbar">
       <div class="topbar__inner">
@@ -19,7 +20,7 @@ import { AuthService } from './auth.service';
         </div>
         <nav class="menu">
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-          <a routerLink="/" fragment="catalogo">Brinquedos</a>
+          <a routerLink="/brinquedos" routerLinkActive="active">Brinquedos</a>
           <a routerLink="/" fragment="contato">Contato</a>
           <a *ngIf="!isLoggedIn()" routerLink="/login" class="btn-login">Login</a>
 
@@ -40,6 +41,8 @@ import { AuthService } from './auth.service';
     <main>
       <router-outlet></router-outlet>
     </main>
+
+    <app-footer></app-footer>
   `,
   styleUrl: './app.css'
 })

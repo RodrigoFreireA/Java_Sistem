@@ -43,4 +43,23 @@ public class ProductService {
         movement.setUsername(username);
         movementRepository.save(movement);
     }
+
+    @Transactional
+    public void increaseStock(UUID productId, int quantity, String username) {
+        Product product = productRepository.findByIdForUpdate(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found: " + productId));
+
+        if (quantity <= 0) throw new IllegalArgumentException("Quantity must be positive");
+
+        int newQty = product.getStockQuantity() + quantity;
+        product.setStockQuantity(newQty);
+        productRepository.save(product);
+
+        InventoryMovement movement = new InventoryMovement();
+        movement.setProduct(product);
+        movement.setQuantityChange(quantity);
+        movement.setType(InventoryMovement.MovementType.IN);
+        movement.setUsername(username);
+        movementRepository.save(movement);
+    }
 }

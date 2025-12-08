@@ -13,5 +13,8 @@ public class ProductDTO {
     public Integer stockQuantity;
     public Integer minStockLevel;
     public String category;
+    public String size;
+    public String ageRange;
+    public String galleryUrls;
     public String imageUrl;
 }

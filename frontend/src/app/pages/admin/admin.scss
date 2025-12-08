@@ -50,6 +50,19 @@ thead tr { border-bottom: 1px solid var(--border); }
   margin-bottom: 8px;
 }
 
+.actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
 .booking-item {
   border: 1px solid var(--border);
   border-radius: 10px;

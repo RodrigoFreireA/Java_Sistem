@@ -1,0 +1,37 @@
+<div class="product-detail page" *ngIf="product; else loadingOrError">
+  <div class="hero">
+    <div class="hero-slider">
+      <img [src]="slides[currentSlide]" [alt]="product.name" />
+      <button class="slider-nav prev" (click)="prevSlide()" aria-label="Anterior">&#8249;</button>
+      <button class="slider-nav next" (click)="nextSlide()" aria-label="Próximo">&#8250;</button>
+      <div class="slider-dots" *ngIf="slides.length > 1">
+        <button *ngFor="let s of slides; index as i" [class.active]="i===currentSlide" (click)="goToSlide(i)"></button>
+      </div>
+    </div>
+    <div class="hero-info">
+      <h2>{{product.name}}</h2>
+      <div class="muted">{{product.category}}</div>
+      <div class="price">R$ {{product.salePrice | number:'1.2-2'}}</div>
+      <div class="stock">Estoque: {{product.stockQuantity}}</div>
+      <button class="btn-primary" (click)="agendar()">Agendar</button>
+    </div>
+  </div>
+
+  <div class="details">
+    <h3>Descrição</h3>
+    <p>{{product.description || 'Sem descrição.'}}</p>
+    <div class="grid">
+      <div><strong>SKU:</strong> {{product.sku}}</div>
+      <div><strong>Estoque:</strong> {{product.stockQuantity}}</div>
+      <div><strong>Tamanho:</strong> {{product.size || 'N/A'}}</div>
+      <div><strong>Faixa etária:</strong> {{product.ageRange || 'N/A'}}</div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingOrError>
+  <div class="page product-detail">
+    <div class="error" *ngIf="error">{{error}}</div>
+    <div class="muted" *ngIf="!error">Carregando...</div>
+  </div>
+</ng-template>

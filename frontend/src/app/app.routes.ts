@@ -7,6 +7,8 @@ import { Booking } from './pages/booking/booking';
 import { AdminProducts } from './pages/admin-products/admin-products';
 import { Profile } from './pages/profile/profile';
 import { MyBookings } from './pages/my-bookings/my-bookings';
+import { Catalog } from './pages/catalog/catalog';
+import { ProductDetail } from './pages/product-detail/product-detail';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -14,6 +16,8 @@ export const routes: Routes = [
   { path: 'register', component: Register },
   { path: 'perfil', component: Profile },
   { path: 'meus-agendamentos', component: MyBookings },
+  { path: 'brinquedos', component: Catalog },
+  { path: 'produto/:id', component: ProductDetail },
   { path: 'admin', component: Admin },
   { path: 'admin/produtos', component: AdminProducts },
   { path: 'agendar/:id', component: Booking }

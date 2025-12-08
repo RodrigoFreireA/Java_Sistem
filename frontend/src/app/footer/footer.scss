@@ -1,0 +1,65 @@
+.site-footer {
+  width: 100%;
+  background: #111623;
+  color: #e5e7eb;
+  padding: 32px 24px 20px;
+  border-top: 1px solid #1f2937;
+  margin-top: 32px;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+.brand {
+  display: flex;
+  gap: 12px;
+}
+.logo-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00d2ff, #22c55e);
+  color: #0b1020;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+.brand-name {
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+.brand-sub {
+  color: #9ca3af;
+  font-size: 13px;
+  margin-top: -2px;
+}
+.brand-desc {
+  margin: 6px 0 0;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+.col-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.col-item {
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 20px auto 0;
+  padding-top: 12px;
+  border-top: 1px solid #1f2937;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+}

@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/products")
@@ -39,6 +40,9 @@ public class ProductController {
         p.setMinStockLevel(req.minStockLevel);
         p.setCategory(req.category);
         p.setImageUrl(req.imageUrl);
+        p.setSize(req.size);
+        p.setAgeRange(req.ageRange);
+        p.setGalleryUrls(req.galleryUrls);
 
         Product saved = productRepository.save(p);
 
@@ -65,6 +69,35 @@ public class ProductController {
     public List<ProductDTO> listAll() {
         List<Product> list = productRepository.findAll();
         return list.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    @PutMapping("/{id}")
+    public ProductDTO update(@PathVariable UUID id, @Valid @RequestBody CreateProductRequest req) {
+        Product p = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found: " + id));
+        p.setSku(req.sku);
+        p.setName(req.name);
+        p.setDescription(req.description);
+        p.setCostPrice(req.costPrice);
+        p.setSalePrice(req.salePrice);
+        p.setStockQuantity(req.stockQuantity);
+        p.setMinStockLevel(req.minStockLevel);
+        p.setCategory(req.category);
+        p.setImageUrl(req.imageUrl);
+        p.setSize(req.size);
+        p.setAgeRange(req.ageRange);
+        p.setGalleryUrls(req.galleryUrls);
+        Product saved = productRepository.save(p);
+        return toDTO(saved);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        if (!productRepository.existsById(id)) {
+            throw new EntityNotFoundException("Product not found: " + id);
+        }
+        productRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/low-stock")
@@ -95,6 +128,9 @@ public class ProductController {
         dto.minStockLevel = p.getMinStockLevel();
         dto.category = p.getCategory();
         dto.imageUrl = p.getImageUrl();
+        dto.size = p.getSize();
+        dto.ageRange = p.getAgeRange();
+        dto.galleryUrls = p.getGalleryUrls();
         return dto;
     }
 

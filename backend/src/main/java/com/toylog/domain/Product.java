@@ -43,6 +43,15 @@ public class Product {
 
     private String category;
 
+    @Column(name = "size")
+    private String size;
+
+    @Column(name = "age_range")
+    private String ageRange;
+
+    @Column(name = "gallery_urls", columnDefinition = "text")
+    private String galleryUrls;
+
     @Version
     @Column(name = "version")
     private Long version;
@@ -79,6 +88,12 @@ public class Product {
     public void setMinStockLevel(Integer minStockLevel) { this.minStockLevel = minStockLevel; }
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
+    public String getSize() { return size; }
+    public void setSize(String size) { this.size = size; }
+    public String getAgeRange() { return ageRange; }
+    public void setAgeRange(String ageRange) { this.ageRange = ageRange; }
+    public String getGalleryUrls() { return galleryUrls; }
+    public void setGalleryUrls(String galleryUrls) { this.galleryUrls = galleryUrls; }
     public Long getVersion() { return version; }
     public void setVersion(Long version) { this.version = version; }
     public String getImageUrl() { return imageUrl; }
