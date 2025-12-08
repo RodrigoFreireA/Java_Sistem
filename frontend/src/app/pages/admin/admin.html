@@ -63,11 +63,21 @@
         <label>Faixa etária
           <input name="ageRange" [(ngModel)]="product.ageRange" placeholder="Ex: 3-10 anos" />
         </label>
-        <label>Imagens (até 3 arquivos)
-          <input type="file" accept="image/*" multiple (change)="onGalleryFilesChange($event)" />
-          <div class="muted small">As imagens serão salvas junto com a ficha do brinquedo (máx. 3).</div>
+        <div class="gallery-control">
+          <div class="gallery-header">
+            <span>Imagens (até 3 arquivos)</span>
+            <button type="button" class="btn-compact" (click)="fileInput.click()" [disabled]="galleryItems.length >= 3">+</button>
+          </div>
+          <div class="gallery-list" *ngIf="galleryItems.length > 0">
+            <div class="gallery-item" *ngFor="let g of galleryItems; index as i">
+              <span class="chip">{{g.name}}</span>
+              <button type="button" class="btn-compact" (click)="removeGalleryItem(i)">x</button>
+            </div>
+          </div>
+          <input #fileInput type="file" accept="image/*" multiple (change)="onGalleryFilesChange($event)" />
+          <div class="muted small">Máx. 3 imagens. Selecione arquivos locais; eles serão salvos no cadastro.</div>
           <div class="error" *ngIf="galleryError">{{galleryError}}</div>
-        </label>
+        </div>
         <label>Preco de locacao (R$)
           <input name="salePrice" [(ngModel)]="product.salePrice" type="number" step="0.01" placeholder="Ex: 550" required />
         </label>

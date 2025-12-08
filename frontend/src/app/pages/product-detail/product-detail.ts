@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../product.service';
 import { AuthService } from '../../auth.service';
+import { BookingService } from '../../booking.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -18,12 +19,16 @@ export class ProductDetail implements OnInit {
   currentSlide = 0;
   // use relative path served from public/images
   private defaultSlides = ['images/carousel1.jpg', 'images/carousel2.jpg', 'images/carousel3.jpg'];
+  alreadyBooked = false;
+  bookedDate: string | null = null;
+  outOfStock = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private productService: ProductService,
-    private authService: AuthService
+    private authService: AuthService,
+    private bookingService: BookingService
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +47,8 @@ export class ProductDetail implements OnInit {
         this.product = p;
         this.slides = this.buildSlides(p);
         this.currentSlide = 0;
+        this.outOfStock = (p.stockQuantity ?? 0) <= 0;
+        this.checkUserBooking(p.id);
       },
       error: (err) => this.error = err?.error?.message || 'Erro ao carregar produto'
     });
@@ -49,6 +56,7 @@ export class ProductDetail implements OnInit {
 
   agendar() {
     if (!this.product?.id) return;
+    if (this.alreadyBooked || this.outOfStock) return;
     if (!this.authService.isLoggedIn()) {
       this.router.navigateByUrl('/login');
       return;
@@ -71,17 +79,47 @@ export class ProductDetail implements OnInit {
   }
 
   private buildSlides(p: any): string[] {
+    const gallery = this.parseGallery(p?.galleryUrls);
     const list: string[] = [];
-    if (p?.imageUrl) list.push(p.imageUrl);
-    if (p?.galleryUrls) {
-      const extra = String(p.galleryUrls)
-        .split(',')
-        .map((s) => s.trim())
-        .filter((s) => !!s);
-      list.push(...extra);
+    if (gallery.length > 0) {
+      list.push(...gallery);
+    } else if (p?.imageUrl) {
+      list.push(p.imageUrl);
     }
-    list.push(...this.defaultSlides);
     const unique = Array.from(new Set(list.filter(Boolean)));
-    return unique.length > 0 ? unique : ['https://via.placeholder.com/900x400?text=Brinquedo'];
+    if (unique.length > 0) return unique;
+    return [this.defaultSlides[0]];
+  }
+
+  private parseGallery(raw: any): string[] {
+    if (!raw) return [];
+    try {
+      const arr = JSON.parse(raw);
+      if (Array.isArray(arr)) {
+        return arr.map((v: any) => String(v)).filter((v) => !!v);
+      }
+    } catch {}
+    return String(raw)
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
+
+  private checkUserBooking(productId: string) {
+    this.alreadyBooked = false;
+    this.bookedDate = null;
+    if (!this.authService.isLoggedIn()) return;
+    this.bookingService.listMine().subscribe({
+      next: (list) => {
+        const active = (list || []).find((b: any) =>
+          b.productId === productId && b.status === 'PENDING'
+        );
+        if (active) {
+          this.alreadyBooked = true;
+          this.bookedDate = active.eventDate;
+        }
+      },
+      error: () => {}
+    });
   }
 }

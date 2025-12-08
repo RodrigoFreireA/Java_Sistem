@@ -13,7 +13,15 @@
       <div class="muted">{{product.category}}</div>
       <div class="price">R$ {{product.salePrice | number:'1.2-2'}}</div>
       <div class="stock">Estoque: {{product.stockQuantity}}</div>
-      <button class="btn-primary" (click)="agendar()">Agendar</button>
+      <button class="btn-primary" [class.disabled]="alreadyBooked || outOfStock" [disabled]="alreadyBooked || outOfStock" (click)="agendar()">
+        {{ alreadyBooked ? 'Já agendado' : outOfStock ? 'Sem estoque' : 'Agendar' }}
+      </button>
+      <div class="warning" *ngIf="alreadyBooked || outOfStock">
+        <ng-container *ngIf="alreadyBooked; else semEstoqueDetail">
+          Produto já agendado para {{bookedDate}}. Aguarde atualização de status.
+        </ng-container>
+        <ng-template #semEstoqueDetail>Sem estoque disponível.</ng-template>
+      </div>
     </div>
   </div>
 

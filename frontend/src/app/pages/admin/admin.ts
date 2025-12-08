@@ -21,6 +21,7 @@ export class Admin implements OnInit {
   editingId: string | null = null;
   editForm: any = { eventDate: '', status: 'PENDING', notes: '' };
   editingProductId: string | null = null;
+  galleryItems: { name: string; data: string }[] = [];
   product: any = {
     name: '',
     sku: '',
@@ -51,29 +52,6 @@ export class Admin implements OnInit {
     });
   }
 
-  async onGalleryFilesChange(event: any) {
-    const files: FileList | null = event?.target?.files || null;
-    if (!files) return;
-    const selected = Array.from(files).slice(0, 3);
-    try {
-      const dataUrls = await Promise.all(
-        selected.map(
-          (file) =>
-            new Promise<string>((resolve, reject) => {
-              const reader = new FileReader();
-              reader.onload = () => resolve(reader.result as string);
-              reader.onerror = () => reject(reader.error);
-              reader.readAsDataURL(file);
-            })
-        )
-      );
-      this.galleryError = '';
-      this.product.galleryUrls = dataUrls.join(',');
-    } catch (e) {
-      this.galleryError = 'Falha ao ler imagens';
-    }
-  }
-
   loadProducts() {
     this.productLoadError = '';
     this.productLoading = true;
@@ -96,7 +74,8 @@ export class Admin implements OnInit {
       costPrice: Number(this.product.costPrice),
       salePrice: Number(this.product.salePrice),
       stockQuantity: Number(this.product.stockQuantity),
-      minStockLevel: Number(this.product.minStockLevel)
+      minStockLevel: Number(this.product.minStockLevel),
+      galleryUrls: JSON.stringify(this.galleryItems.map(i => i.data))
     };
 
     const obs = this.editingProductId
@@ -168,6 +147,7 @@ export class Admin implements OnInit {
       ageRange: p.ageRange,
       galleryUrls: p.galleryUrls
     };
+    this.galleryItems = this.parseGallery(p.galleryUrls);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -193,5 +173,69 @@ export class Admin implements OnInit {
   private resetProductForm() {
     this.editingProductId = null;
     this.product = { name: '', sku: '', category: '', description: '', salePrice: 0, costPrice: 0, stockQuantity: 0, minStockLevel: 0, size: '', ageRange: '', galleryUrls: '' };
+    this.galleryItems = [];
+  }
+
+  async onGalleryFilesChange(event: any) {
+    const files: FileList | null = event?.target?.files || null;
+    if (!files) return;
+    const available = 3 - this.galleryItems.length;
+    if (available <= 0) return;
+    const selected = Array.from(files).slice(0, available);
+    try {
+      const dataUrls = await Promise.all(
+        selected.map(
+          (file) =>
+            new Promise<{ name: string; data: string }>((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve({ name: file.name, data: reader.result as string });
+              reader.onerror = () => reject(reader.error);
+              reader.readAsDataURL(file);
+            })
+        )
+      );
+      this.galleryError = '';
+      this.galleryItems = [...this.galleryItems, ...dataUrls];
+      this.product.galleryUrls = JSON.stringify(this.galleryItems.map(i => i.data));
+    } catch (e) {
+      this.galleryError = 'Falha ao ler imagens';
+    } finally {
+      if (event?.target) {
+        event.target.value = '';
+      }
+    }
+  }
+
+  removeGalleryItem(index: number) {
+    this.galleryItems = this.galleryItems.filter((_, i) => i !== index);
+    this.product.galleryUrls = JSON.stringify(this.galleryItems.map(i => i.data));
+  }
+
+  private parseGallery(raw: any): { name: string; data: string }[] {
+    if (!raw) return [];
+    try {
+      const arr = JSON.parse(raw);
+      if (Array.isArray(arr)) {
+        return arr
+          .map((d: any, idx: number) => {
+            const data = d ? String(d) : '';
+            if (!data) return null;
+            return { name: `Imagem ${idx + 1}`, data };
+          })
+          .filter((v): v is { name: string; data: string } => !!v);
+      }
+    } catch (_) {
+      // fallback: comma-separated string
+      const parts = String(raw)
+        .split(',')
+        .map((s: string, idx: number) => {
+          const data = s.trim();
+          if (!data) return null;
+          return { name: `Imagem ${idx + 1}`, data };
+        })
+        .filter((v): v is { name: string; data: string } => !!v);
+      if (parts.length) return parts;
+    }
+    return [];
   }
 }

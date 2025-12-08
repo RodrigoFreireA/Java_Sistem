@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProductService } from '../../product.service';
 import { AuthService } from '../../auth.service';
-import { BookingService } from '../../booking.service';
 
 const FALLBACK_IMAGE = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250"><rect width="100%" height="100%" fill="%23121a2a"/><text x="50%" y="50%" fill="%23ffffff" font-family="Arial" font-size="18" dominant-baseline="middle" text-anchor="middle">Imagem%20indisponivel</text></svg>';
 
@@ -20,7 +19,6 @@ export class Home implements OnInit, OnDestroy {
   cards: any[] = [];
   filteredCards: any[] = [];
   loadError = '';
-  pendingMap: Record<string, string> = {};
 
   categories: { name: string; count: number; active: boolean }[] = [
     { name: 'Todos os Brinquedos', count: 0, active: true }
@@ -56,13 +54,11 @@ export class Home implements OnInit, OnDestroy {
   constructor(
     private productService: ProductService,
     private authService: AuthService,
-    private router: Router,
-    private bookingService: BookingService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadProducts();
-    this.loadUserBookings();
     this.startSlider();
   }
 
@@ -94,17 +90,11 @@ export class Home implements OnInit, OnDestroy {
     if (!productId) {
       return;
     }
-    if (this.isBlocked(productId, p?.stockQuantity)) return;
     if (!this.authService.isLoggedIn()) {
       this.router.navigateByUrl('/login');
       return;
     }
     this.router.navigate(['/agendar', productId]);
-  }
-
-  goToDetail(productId: string) {
-    if (!productId) return;
-    this.router.navigate(['/produto', productId]);
   }
 
   nextSlide() {
@@ -175,31 +165,5 @@ export class Home implements OnInit, OnDestroy {
     } else {
       this.filteredCards = this.cards.filter(c => (c.category || '').toLowerCase().includes(catName.toLowerCase()));
     }
-  }
-
-  private loadUserBookings() {
-    if (!this.authService.isLoggedIn()) return;
-    this.bookingService.listMine().subscribe({
-      next: (list) => {
-        const map: Record<string, string> = {};
-        (list || []).forEach((b: any) => {
-          if (b.productId && b.status === 'PENDING') {
-            map[b.productId] = b.eventDate;
-          }
-        });
-        this.pendingMap = map;
-      },
-      error: () => {}
-    });
-  }
-
-  isBlocked(productId: string, stock?: number): boolean {
-    const pending = !!this.pendingMap[productId];
-    const noStock = typeof stock === 'number' && stock <= 0;
-    return pending || noStock;
-  }
-
-  bookedDate(productId: string): string | null {
-    return this.pendingMap[productId] || null;
   }
 }

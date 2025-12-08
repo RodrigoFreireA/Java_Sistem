@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { ProductService } from '../../product.service';
 import { AuthService } from '../../auth.service';
 
+const FALLBACK_IMAGE = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250"><rect width="100%" height="100%" fill="%23121a2a"/><text x="50%" y="50%" fill="%23ffffff" font-family="Arial" font-size="18" dominant-baseline="middle" text-anchor="middle">Imagem%20indisponivel</text></svg>';
+
 @Component({
   selector: 'app-catalog',
   standalone: true,
@@ -67,5 +69,26 @@ export class Catalog implements OnInit {
     const list = Object.keys(counts).map(name => ({ name, count: counts[name], active: false }));
     const allCount = list.reduce((sum, c) => sum + c.count, 0);
     return [{ name: 'Todos os Brinquedos', count: allCount, active: true }, ...list];
+  }
+
+  primaryImage(p: any): string {
+    if (p?.imageUrl) return p.imageUrl;
+    const gallery = this.parseGallery(p?.galleryUrls);
+    if (gallery.length > 0) return gallery[0];
+    return FALLBACK_IMAGE;
+  }
+
+  private parseGallery(raw: any): string[] {
+    if (!raw) return [];
+    try {
+      const arr = JSON.parse(raw);
+      if (Array.isArray(arr)) {
+        return arr.map((v: any) => String(v)).filter((v) => !!v);
+      }
+    } catch {}
+    return String(raw)
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
   }
 }

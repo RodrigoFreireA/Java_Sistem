@@ -34,7 +34,7 @@
       <div class="empty" *ngIf="filteredCards.length === 0">Nenhum brinquedo encontrado.</div>
       <div class="grid" *ngIf="filteredCards.length > 0" id="catalogo">
         <div class="card" *ngFor="let card of filteredCards">
-          <div class="card-img">
+          <div class="card-img" (click)="goToDetail(card.productId)" role="button">
             <img [src]="card.image" alt="{{card.name}}" />
             <div class="tag age" *ngIf="card.ageRange">{{card.ageRange}}</div>
             <div class="tag size" *ngIf="card.size">{{card.size}}</div>
@@ -44,7 +44,17 @@
             <div class="card-cat">{{card.category}}</div>
             <div class="card-bottom">
               <span class="price">R$ {{card.price | number:'1.0-0'}}</span>
-              <button class="btn-success" (click)="selectProduct(card)">Agendar</button>
+              <div class="cta">
+                <button class="btn-success" [class.disabled]="isBlocked(card.productId, card.stockQuantity)" [disabled]="isBlocked(card.productId, card.stockQuantity)" (click)="selectProduct(card)">
+                  {{ isBlocked(card.productId, card.stockQuantity) ? (bookedDate(card.productId) ? 'Já agendado' : 'Sem estoque') : 'Agendar' }}
+                </button>
+                <div class="warning" *ngIf="isBlocked(card.productId, card.stockQuantity)">
+                  <ng-container *ngIf="bookedDate(card.productId); else semEstoque">
+                    Agendado para {{ bookedDate(card.productId) }}. Aguarde atualização.
+                  </ng-container>
+                  <ng-template #semEstoque>Sem estoque disponível.</ng-template>
+                </div>
+              </div>
             </div>
           </div>
         </div>

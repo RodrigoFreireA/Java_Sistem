@@ -43,6 +43,39 @@
   gap: 6px;
 }
 
+.gallery-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.gallery-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.gallery-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.gallery-item {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.gallery-item input {
+  flex: 1;
+}
+.chip {
+  padding: 6px 10px;
+  background: #1d2433;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 13px;
+}
+
 .error { color: #f87171; }
 .muted { color: var(--muted); }
 .small { font-size: 12px; }
