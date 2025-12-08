@@ -5,6 +5,9 @@
   margin: 24px auto;
   padding: 0 16px 24px;
   color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .grid {
@@ -17,15 +20,28 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 12px;
+  padding: 16px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.4);
 }
 
 .form {
   display: grid;
-  gap: 8px;
+  gap: 12px;
 }
-.form textarea { resize: vertical; background: var(--surface-alt); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 10px; }
+.form textarea,
+.form input,
+.form select {
+  background: var(--surface-alt);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+}
+.form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 
 .error { color: #f87171; }
 .muted { color: var(--muted); }
@@ -60,7 +76,7 @@ thead tr { border-bottom: 1px solid var(--border); }
   display: flex;
   gap: 8px;
   align-items: center;
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
 .booking-item {

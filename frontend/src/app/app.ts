@@ -22,6 +22,7 @@ import { Footer } from './footer/footer';
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
           <a routerLink="/brinquedos" routerLinkActive="active">Brinquedos</a>
           <a routerLink="/" fragment="contato">Contato</a>
+          <a *ngIf="isAdmin()" routerLink="/admin" routerLinkActive="active">Admin</a>
           <a *ngIf="!isLoggedIn()" routerLink="/login" class="btn-login">Login</a>
 
           <div *ngIf="isLoggedIn()" class="dropdown">
@@ -58,6 +59,10 @@ export class App {
 
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
+  }
+
+  isAdmin(): boolean {
+    return this.authService.getRole() === 'ADMIN';
   }
 
   toggleDropdown(event: MouseEvent) {

@@ -34,6 +34,7 @@ export class Admin implements OnInit {
     ageRange: '',
     galleryUrls: ''
   };
+  galleryError = '';
 
   constructor(private bookingService: BookingService, private productService: ProductService) {}
 
@@ -48,6 +49,29 @@ export class Admin implements OnInit {
       next: (data) => this.bookings = data,
       error: (err) => this.bookingError = err?.error?.message || 'Erro ao carregar agendamentos'
     });
+  }
+
+  async onGalleryFilesChange(event: any) {
+    const files: FileList | null = event?.target?.files || null;
+    if (!files) return;
+    const selected = Array.from(files).slice(0, 3);
+    try {
+      const dataUrls = await Promise.all(
+        selected.map(
+          (file) =>
+            new Promise<string>((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve(reader.result as string);
+              reader.onerror = () => reject(reader.error);
+              reader.readAsDataURL(file);
+            })
+        )
+      );
+      this.galleryError = '';
+      this.product.galleryUrls = dataUrls.join(',');
+    } catch (e) {
+      this.galleryError = 'Falha ao ler imagens';
+    }
   }
 
   loadProducts() {
